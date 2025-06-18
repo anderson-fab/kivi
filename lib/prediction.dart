@@ -26,7 +26,7 @@ class _PredictionPageState extends State<PredictionPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://26ae-102-129-75-181.ngrok-free.app/predict'),
+        Uri.parse('https://b54d-102-129-75-145.ngrok-free.app; /predict'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'Hour': int.parse(_hourController.text),

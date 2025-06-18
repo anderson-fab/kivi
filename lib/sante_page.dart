@@ -99,11 +99,13 @@ class _SantePageState extends State<SantePage> {
         return Scaffold(
           backgroundColor: lightGreen,
           appBar: AppBar(
-            title: Text("Santé Environnementale",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                )),
+            title: Text(
+              "Santé Environnementale",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             backgroundColor: primaryGreen,
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0,
@@ -254,10 +256,7 @@ class _SantePageState extends State<SantePage> {
         SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -370,12 +369,14 @@ class _SantePageState extends State<SantePage> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text("Sélectionnez votre profil :",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: darkGreen,
-              )),
+          child: Text(
+            "Sélectionnez votre profil :",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: darkGreen,
+            ),
+          ),
         ),
         SizedBox(height: 16),
         GridView.builder(
@@ -417,17 +418,15 @@ class _SantePageState extends State<SantePage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          Provider.of<UserProfileNotifier>(context, listen: false)
-              .setProfile(profile);
+          Provider.of<UserProfileNotifier>(
+            context,
+            listen: false,
+          ).setProfile(profile);
         },
         child: Container(
           padding: EdgeInsets.all(12),
-          constraints: BoxConstraints(
-            minHeight: 100,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          constraints: BoxConstraints(minHeight: 100),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -438,11 +437,7 @@ class _SantePageState extends State<SantePage> {
                   color: profile.color.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  profile.icon,
-                  size: 24,
-                  color: profile.color,
-                ),
+                child: Icon(profile.icon, size: 24, color: profile.color),
               ),
               SizedBox(height: 8),
               Text(
@@ -486,11 +481,7 @@ class _SantePageState extends State<SantePage> {
               color: profile.color.withOpacity(0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              profile.icon,
-              size: 28,
-              color: profile.color,
-            ),
+            child: Icon(profile.icon, size: 28, color: profile.color),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -499,10 +490,7 @@ class _SantePageState extends State<SantePage> {
               children: [
                 Text(
                   "Profil actuel",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
                 SizedBox(height: 2),
                 Text(
@@ -519,8 +507,10 @@ class _SantePageState extends State<SantePage> {
           IconButton(
             icon: Icon(Icons.edit, color: primaryGreen, size: 24),
             onPressed: () {
-              Provider.of<UserProfileNotifier>(context, listen: false)
-                  .setProfile(null);
+              Provider.of<UserProfileNotifier>(
+                context,
+                listen: false,
+              ).setProfile(null);
             },
           ),
         ],
@@ -563,11 +553,7 @@ class _SantePageState extends State<SantePage> {
               color: statusColor.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              healthStatus['icon'],
-              size: 40,
-              color: statusColor,
-            ),
+            child: Icon(healthStatus['icon'], size: 40, color: statusColor),
           ),
           SizedBox(height: 16),
           Text(
@@ -611,9 +597,10 @@ class _SantePageState extends State<SantePage> {
         'status': 'ATTENTION REQUISE',
         'message': 'Votre environnement présente des risques pour votre santé',
         'icon': Icons.warning,
-        'color': risks.any((r) => r['severity'] == 'high')
-            ? dangerColor
-            : warningColor,
+        'color':
+            risks.any((r) => r['severity'] == 'high')
+                ? dangerColor
+                : warningColor,
       };
     }
   }
@@ -844,10 +831,7 @@ class _SantePageState extends State<SantePage> {
         decoration: BoxDecoration(
           color: safeColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: safeColor.withOpacity(0.3),
-            width: 1,
-          ),
+          border: Border.all(color: safeColor.withOpacity(0.3), width: 1),
         ),
         child: Row(
           children: [
@@ -856,10 +840,7 @@ class _SantePageState extends State<SantePage> {
             Expanded(
               child: Text(
                 "Aucun risque détecté pour votre profil actuel",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[800],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[800]),
               ),
             ),
           ],
@@ -951,8 +932,11 @@ class _SantePageState extends State<SantePage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.lightbulb_outline,
-                          color: primaryGreen, size: 20),
+                      Icon(
+                        Icons.lightbulb_outline,
+                        color: primaryGreen,
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
                       Expanded(
                         child: Text(

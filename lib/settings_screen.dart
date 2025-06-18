@@ -10,7 +10,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
-  final Color _greenColor = Color(0xFF4CAF50); // Couleur verte environnementale
+  final Color _greenColor = Color(0xFF4CAF50);
 
   @override
   void initState() {
@@ -34,8 +34,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final thresholdProvider = Provider.of<ThresholdProvider>(context);
-    final temperatureUnitProvider =
-        Provider.of<TemperatureUnitProvider>(context);
+    final temperatureUnitProvider = Provider.of<TemperatureUnitProvider>(
+      context,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +62,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               title: Text('Seuil de température'),
               subtitle: Text(
-                  'Min: ${thresholdProvider.minTemperatureThreshold}°C, Max: ${thresholdProvider.maxTemperatureThreshold}°C'),
+                'Min: ${thresholdProvider.minTemperatureThreshold}°C, Max: ${thresholdProvider.maxTemperatureThreshold}°C',
+              ),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
                 _showTemperatureThresholdDialog(context, thresholdProvider);
@@ -71,7 +73,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               title: Text('Seuil d\'humidité'),
               subtitle: Text(
-                  'Min: ${thresholdProvider.minHumidityThreshold}%, Max: ${thresholdProvider.maxHumidityThreshold}%'),
+                'Min: ${thresholdProvider.minHumidityThreshold}%, Max: ${thresholdProvider.maxHumidityThreshold}%',
+              ),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
                 _showHumidityThresholdDialog(context, thresholdProvider);
@@ -81,7 +84,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               title: Text('Seuil de gaz inflammable'),
               subtitle: Text(
-                  'Min: ${thresholdProvider.minFlammableGasThreshold} ppm, Max: ${thresholdProvider.maxFlammableGasThreshold} ppm'),
+                'Min: ${thresholdProvider.minFlammableGasThreshold} ppm, Max: ${thresholdProvider.maxFlammableGasThreshold} ppm',
+              ),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
                 _showFlammableGasThresholdDialog(context, thresholdProvider);
@@ -91,7 +95,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               title: Text('Seuil de gaz polluants'),
               subtitle: Text(
-                  'Min: ${thresholdProvider.minPollutantGasThreshold} ppm, Max: ${thresholdProvider.maxPollutantGasThreshold} ppm'),
+                'Min: ${thresholdProvider.minPollutantGasThreshold} ppm, Max: ${thresholdProvider.maxPollutantGasThreshold} ppm',
+              ),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
                 _showPollutantGasThresholdDialog(context, thresholdProvider);
@@ -101,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SwitchListTile(
               title: Text('Mode sombre'),
               value: themeProvider.isDarkMode,
-              activeColor: _greenColor, // Ajout de la couleur verte
+              activeColor: _greenColor,
               onChanged: (bool value) {
                 themeProvider.toggleTheme();
               },
@@ -138,7 +143,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showTemperatureThresholdDialog(
-      BuildContext context, ThresholdProvider thresholdProvider) {
+    BuildContext context,
+    ThresholdProvider thresholdProvider,
+  ) {
     TextEditingController minController = TextEditingController(
       text: thresholdProvider.minTemperatureThreshold.toString(),
     );
@@ -184,7 +191,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Veuillez entrer des valeurs valides')),
+                      content: Text('Veuillez entrer des valeurs valides'),
+                    ),
                   );
                 }
               },
@@ -197,7 +205,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showHumidityThresholdDialog(
-      BuildContext context, ThresholdProvider thresholdProvider) {
+    BuildContext context,
+    ThresholdProvider thresholdProvider,
+  ) {
     TextEditingController minController = TextEditingController(
       text: thresholdProvider.minHumidityThreshold.toString(),
     );
@@ -243,7 +253,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Veuillez entrer des valeurs valides')),
+                      content: Text('Veuillez entrer des valeurs valides'),
+                    ),
                   );
                 }
               },
@@ -256,7 +267,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showFlammableGasThresholdDialog(
-      BuildContext context, ThresholdProvider thresholdProvider) {
+    BuildContext context,
+    ThresholdProvider thresholdProvider,
+  ) {
     TextEditingController minController = TextEditingController(
       text: thresholdProvider.minFlammableGasThreshold.toString(),
     );
@@ -302,7 +315,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Veuillez entrer des valeurs valides')),
+                      content: Text('Veuillez entrer des valeurs valides'),
+                    ),
                   );
                 }
               },
@@ -315,7 +329,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showPollutantGasThresholdDialog(
-      BuildContext context, ThresholdProvider thresholdProvider) {
+    BuildContext context,
+    ThresholdProvider thresholdProvider,
+  ) {
     TextEditingController minController = TextEditingController(
       text: thresholdProvider.minPollutantGasThreshold.toString(),
     );
@@ -361,7 +377,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Veuillez entrer des valeurs valides')),
+                      content: Text('Veuillez entrer des valeurs valides'),
+                    ),
                   );
                 }
               },

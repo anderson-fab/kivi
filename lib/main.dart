@@ -34,9 +34,11 @@ Future<void> main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'your_channel_id',
+    'threshold_channel_id',
     'Seuils dépassés',
     importance: Importance.high,
+    playSound: true,
+    enableVibration: true,
   );
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -44,9 +46,11 @@ Future<void> main() async {
       >()
       ?.createNotificationChannel(channel);
 
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.requestPermission(alert: true, badge: true, sound: true);
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
@@ -98,7 +102,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
-          'your_channel_id',
+          'threshold_channel_id',
           'Seuils dépassés',
           importance: Importance.high,
           priority: Priority.high,
@@ -282,7 +286,6 @@ class _RealTimeDataScreenState extends State<RealTimeDataScreen> {
   double _humidity = 0.0;
   double _gasLevel = 0.0;
   double _pollutantLevel = 0.0;
-  bool _smokeDetected = false;
 
   @override
   void initState() {
@@ -293,46 +296,41 @@ class _RealTimeDataScreenState extends State<RealTimeDataScreen> {
   void _listenToRealtimeDatabase() {
     _database.child('DHT/temperature').onValue.listen((event) {
       if (event.snapshot.value != null) {
+        final double newTemp = (event.snapshot.value as num).toDouble();
         setState(() {
-          _temperature = (event.snapshot.value as num).toDouble();
+          _temperature = newTemp;
         });
-        _checkTemperatureThresholds(_temperature);
+        _checkTemperatureThresholds(newTemp);
       }
     });
 
     _database.child('DHT/humidity').onValue.listen((event) {
       if (event.snapshot.value != null) {
+        final double newHumidity = (event.snapshot.value as num).toDouble();
         setState(() {
-          _humidity = (event.snapshot.value as num).toDouble();
+          _humidity = newHumidity;
         });
-        _checkHumidityThresholds(_humidity);
+        _checkHumidityThresholds(newHumidity);
       }
     });
 
     _database.child('MQ2/gasLevel').onValue.listen((event) {
       if (event.snapshot.value != null) {
+        final double newGasLevel = (event.snapshot.value as num).toDouble();
         setState(() {
-          _gasLevel = (event.snapshot.value as num).toDouble();
+          _gasLevel = newGasLevel;
         });
-        _checkGasThresholds(_gasLevel);
+        _checkGasThresholds(newGasLevel);
       }
     });
 
     _database.child('MQ135/gasLevel').onValue.listen((event) {
       if (event.snapshot.value != null) {
+        final double newPollutant = (event.snapshot.value as num).toDouble();
         setState(() {
-          _pollutantLevel = (event.snapshot.value as num).toDouble();
+          _pollutantLevel = newPollutant;
         });
-        _checkPollutantThresholds(_pollutantLevel);
-      }
-    });
-
-    _database.child('MQ2/smokeDetected').onValue.listen((event) {
-      if (event.snapshot.value != null) {
-        setState(() {
-          _smokeDetected = event.snapshot.value == true;
-        });
-        _checkSmokeDetection(_smokeDetected);
+        _checkPollutantThresholds(newPollutant);
       }
     });
   }
@@ -439,39 +437,18 @@ class _RealTimeDataScreenState extends State<RealTimeDataScreen> {
     }
   }
 
-  void _checkSmokeDetection(bool smokeDetected) async {
-    final prefs = await SharedPreferences.getInstance();
-    final notificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
-
-    if (!notificationsEnabled) return;
-
-    if (smokeDetected) {
-      await _showNotification(
-        title: 'Alerte : Fumée détectée',
-        body: 'Attention : Fumée détectée !',
-      );
-
-      Future.delayed(const Duration(minutes: 1), () async {
-        if (_smokeDetected) {
-          await _showNotification(
-            title: 'Présence continue de fumée',
-            body: 'Attention : Présence continue de fumée détectée.',
-          );
-        }
-      });
-    }
-  }
-
   Future<void> _showNotification({
     required String title,
     required String body,
   }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'your_channel_id',
+          'threshold_channel_id',
           'Seuils dépassés',
           importance: Importance.high,
           priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
         );
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -489,7 +466,6 @@ class _RealTimeDataScreenState extends State<RealTimeDataScreen> {
     final temperatureUnitProvider = Provider.of<TemperatureUnitProvider>(
       context,
     );
-    final thresholdProvider = Provider.of<ThresholdProvider>(context);
 
     double displayTemperature = _temperature;
     if (temperatureUnitProvider.unit == 'Fahrenheit') {
@@ -576,13 +552,6 @@ class _RealTimeDataScreenState extends State<RealTimeDataScreen> {
                   value: '$_pollutantLevel ppm',
                   icon: Icons.air,
                   color: const Color.fromARGB(255, 0, 128, 0),
-                ),
-                const SizedBox(height: 25),
-                SensorCard(
-                  label: 'Fumée',
-                  value: _smokeDetected ? 'Détectée' : 'Non détectée',
-                  icon: Icons.smoke_free,
-                  color: const Color.fromARGB(255, 128, 0, 128),
                 ),
               ],
             ),

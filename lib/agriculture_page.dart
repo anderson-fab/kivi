@@ -60,24 +60,110 @@ class _AgriculturePageState extends State<AgriculturePage> {
 
   // Seuils par défaut pour chaque culture
   final Map<String, Map<String, dynamic>> _seuilsCulture = {
-    'Manioc': {'tempMin': 25, 'tempMax': 35, 'humMin': 60, 'humMax': 80},
-    'Maïs': {'tempMin': 18, 'tempMax': 30, 'humMin': 50, 'humMax': 70},
-    'Tomate': {'tempMin': 20, 'tempMax': 28, 'humMin': 60, 'humMax': 85},
-    'Arachide': {'tempMin': 20, 'tempMax': 30, 'humMin': 50, 'humMax': 70},
+    'Manioc': {
+      'tempMin': 25,
+      'tempMax': 35,
+      'humMin': 60,
+      'humMax': 80,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Maïs': {
+      'tempMin': 18,
+      'tempMax': 30,
+      'humMin': 50,
+      'humMax': 70,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Tomate': {
+      'tempMin': 20,
+      'tempMax': 28,
+      'humMin': 60,
+      'humMax': 85,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Arachide': {
+      'tempMin': 20,
+      'tempMax': 30,
+      'humMin': 50,
+      'humMax': 70,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
     'Banane plantain': {
       'tempMin': 22,
       'tempMax': 32,
       'humMin': 70,
       'humMax': 85,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
     },
-    'Patate douce': {'tempMin': 18, 'tempMax': 28, 'humMin': 60, 'humMax': 80},
-    'Oignon': {'tempMin': 15, 'tempMax': 25, 'humMin': 50, 'humMax': 70},
-    'Choux': {'tempMin': 15, 'tempMax': 22, 'humMin': 60, 'humMax': 80},
-    'Gombo': {'tempMin': 22, 'tempMax': 32, 'humMin': 60, 'humMax': 80},
-    'Épinards': {'tempMin': 15, 'tempMax': 22, 'humMin': 70, 'humMax': 85},
-    'Aubergine': {'tempMin': 20, 'tempMax': 30, 'humMin': 60, 'humMax': 80},
-    'Piment': {'tempMin': 20, 'tempMax': 30, 'humMin': 50, 'humMax': 70},
-    'Concombre': {'tempMin': 20, 'tempMax': 28, 'humMin': 70, 'humMax': 85},
+    'Patate douce': {
+      'tempMin': 18,
+      'tempMax': 28,
+      'humMin': 60,
+      'humMax': 80,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Oignon': {
+      'tempMin': 15,
+      'tempMax': 25,
+      'humMin': 50,
+      'humMax': 70,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Choux': {
+      'tempMin': 15,
+      'tempMax': 22,
+      'humMin': 60,
+      'humMax': 80,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Gombo': {
+      'tempMin': 22,
+      'tempMax': 32,
+      'humMin': 60,
+      'humMax': 80,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Épinards': {
+      'tempMin': 15,
+      'tempMax': 22,
+      'humMin': 70,
+      'humMax': 85,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Aubergine': {
+      'tempMin': 20,
+      'tempMax': 30,
+      'humMin': 60,
+      'humMax': 80,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Piment': {
+      'tempMin': 20,
+      'tempMax': 30,
+      'humMin': 50,
+      'humMax': 70,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
+    'Concombre': {
+      'tempMin': 20,
+      'tempMax': 28,
+      'humMin': 70,
+      'humMax': 85,
+      'airPollutionMax': 200,
+      'flammableGasMax': 100,
+    },
   };
 
   @override
@@ -220,17 +306,17 @@ class _AgriculturePageState extends State<AgriculturePage> {
         }
       }
 
-      if (nh3 != null && nh3 > (seuils['nh3Max'] ?? 200)) {
+      if (nh3 != null && nh3 > (seuils['airPollutionMax'] ?? 200)) {
         _showNotification(
           'Alerte Pollution',
-          '$parcelleNom ($culture): Niveau de pollution élevé!',
+          '$parcelleNom ($culture): Niveau de pollution de l\'air élevé!',
         );
       }
 
-      if (smoke != null && smoke > (seuils['smokeMax'] ?? 100)) {
+      if (smoke != null && smoke > (seuils['flammableGasMax'] ?? 100)) {
         _showNotification(
-          'Alerte Fumée',
-          '$parcelleNom ($culture): Détection de fumée!',
+          'Alerte Gaz',
+          '$parcelleNom ($culture): Niveau de gaz inflammable élevé!',
         );
       }
     }
@@ -483,6 +569,8 @@ class _AgriculturePageState extends State<AgriculturePage> {
     bool humOK =
         _humidity >= (seuils['humMin'] ?? 0) &&
         _humidity <= (seuils['humMax'] ?? 100);
+    bool airPollutionOK = _nh3 <= (seuils['airPollutionMax'] ?? 200);
+    bool flammableGasOK = _smoke <= (seuils['flammableGasMax'] ?? 100);
 
     return Card(
       elevation: 4,
@@ -560,6 +648,24 @@ class _AgriculturePageState extends State<AgriculturePage> {
                   seuils['humMax'],
                 ),
               ],
+              if ((parcelle['capteurs'] as List?)?.contains('MQ135') ?? false)
+                _buildStatusIndicator(
+                  "Pollution air",
+                  _nh3,
+                  "ppm",
+                  airPollutionOK,
+                  null,
+                  seuils['airPollutionMax'],
+                ),
+              if ((parcelle['capteurs'] as List?)?.contains('MQ2') ?? false)
+                _buildStatusIndicator(
+                  "Gaz inflammable",
+                  _smoke,
+                  "ppm",
+                  flammableGasOK,
+                  null,
+                  seuils['flammableGasMax'],
+                ),
               _buildRecommendations(parcelle, tempOK, humOK),
             ],
           ),
@@ -929,20 +1035,21 @@ class _AgriculturePageState extends State<AgriculturePage> {
                   if ((parcelle['capteurs'] as List?)?.contains('MQ135') ??
                       false)
                     _buildDetailRow(
-                      "Pollution NH3",
-                      "Max: ${parcelle['seuils']?['nh3Max'] ?? 'N/A'}ppm",
+                      "Pollution air",
+                      "Max: ${parcelle['seuils']?['airPollutionMax'] ?? 'N/A'}ppm",
                       Icons.air,
                     ),
                   if ((parcelle['capteurs'] as List?)?.contains('MQ2') ?? false)
                     _buildDetailRow(
-                      "Fumée",
-                      "Max: ${parcelle['seuils']?['smokeMax'] ?? 'N/A'}ppm",
+                      "Gaz inflammable",
+                      "Max: ${parcelle['seuils']?['flammableGasMax'] ?? 'N/A'}ppm",
                       Icons.local_fire_department,
                     ),
                   SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[800],
+                      foregroundColor: Colors.white,
                       minimumSize: Size(double.infinity, 50),
                     ),
                     onPressed: () {
@@ -1068,38 +1175,82 @@ class _AgriculturePageState extends State<AgriculturePage> {
                     if ((parcelle['capteurs'] as List?)?.contains('MQ135') ??
                         false) ...[
                       Text(
-                        "Pollution (ppm)",
+                        "Pollution air (ppm)",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      TextFormField(
-                        initialValue:
-                            (parcelle['seuils']?['nh3Max'] ?? 100).toString(),
-                        decoration: InputDecoration(labelText: "Seuil max NH3"),
-                        keyboardType: TextInputType.number,
-                        onSaved:
-                            (value) =>
-                                _currentSeuils['nh3Max'] =
-                                    double.tryParse(value ?? '100') ?? 100,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              initialValue:
+                                  (parcelle['seuils']?['airPollutionMin'] ?? 0)
+                                      .toString(),
+                              decoration: InputDecoration(labelText: "Min"),
+                              keyboardType: TextInputType.number,
+                              onSaved:
+                                  (value) =>
+                                      _currentSeuils['airPollutionMin'] =
+                                          double.tryParse(value ?? '0') ?? 0,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue:
+                                  (parcelle['seuils']?['airPollutionMax'] ??
+                                          200)
+                                      .toString(),
+                              decoration: InputDecoration(labelText: "Max"),
+                              keyboardType: TextInputType.number,
+                              onSaved:
+                                  (value) =>
+                                      _currentSeuils['airPollutionMax'] =
+                                          double.tryParse(value ?? '200') ??
+                                          200,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 20),
                     ],
                     if ((parcelle['capteurs'] as List?)?.contains('MQ2') ??
                         false) ...[
                       Text(
-                        "Gaz (ppm)",
+                        "Gaz inflammable (ppm)",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      TextFormField(
-                        initialValue:
-                            (parcelle['seuils']?['smokeMax'] ?? 50).toString(),
-                        decoration: InputDecoration(
-                          labelText: "Seuil max fumée",
-                        ),
-                        keyboardType: TextInputType.number,
-                        onSaved:
-                            (value) =>
-                                _currentSeuils['smokeMax'] =
-                                    double.tryParse(value ?? '50') ?? 50,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              initialValue:
+                                  (parcelle['seuils']?['flammableGasMin'] ?? 0)
+                                      .toString(),
+                              decoration: InputDecoration(labelText: "Min"),
+                              keyboardType: TextInputType.number,
+                              onSaved:
+                                  (value) =>
+                                      _currentSeuils['flammableGasMin'] =
+                                          double.tryParse(value ?? '0') ?? 0,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue:
+                                  (parcelle['seuils']?['flammableGasMax'] ??
+                                          100)
+                                      .toString(),
+                              decoration: InputDecoration(labelText: "Max"),
+                              keyboardType: TextInputType.number,
+                              onSaved:
+                                  (value) =>
+                                      _currentSeuils['flammableGasMax'] =
+                                          double.tryParse(value ?? '100') ??
+                                          100,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 20),
                     ],
@@ -1115,6 +1266,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[800],
+                  foregroundColor: Colors.white,
                 ),
                 onPressed: () => _sauvegarderSeuils(parcelle['id'] ?? ''),
                 child: Text("Enregistrer"),
@@ -1226,6 +1378,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[800],
+                  foregroundColor: Colors.white,
                 ),
                 onPressed: _ajouterParcelle,
                 child: Text("Enregistrer"),
@@ -1348,6 +1501,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[800],
+                      foregroundColor: Colors.white,
                     ),
                     onPressed: () => _associerCapteurs(),
                     child: Text("Associer"),
@@ -1378,10 +1532,14 @@ class _AgriculturePageState extends State<AgriculturePage> {
             'tempMax': defaultSeuils['tempMax'],
             'humMin': defaultSeuils['humMin'],
             'humMax': defaultSeuils['humMax'],
-            if (_selectedCapteurs.contains('MQ135'))
-              'nh3Max': defaultSeuils['nh3Max'] ?? 100,
-            if (_selectedCapteurs.contains('MQ2'))
-              'smokeMax': defaultSeuils['smokeMax'] ?? 50,
+            if (_selectedCapteurs.contains('MQ135')) ...{
+              'airPollutionMin': defaultSeuils['airPollutionMin'] ?? 0,
+              'airPollutionMax': defaultSeuils['airPollutionMax'] ?? 200,
+            },
+            if (_selectedCapteurs.contains('MQ2')) ...{
+              'flammableGasMin': defaultSeuils['flammableGasMin'] ?? 0,
+              'flammableGasMax': defaultSeuils['flammableGasMax'] ?? 100,
+            },
           };
 
           _selectedCapteurs.clear();
@@ -1460,6 +1618,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green[800],
+                                foregroundColor: Colors.white,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 24,
                                   vertical: 12,
